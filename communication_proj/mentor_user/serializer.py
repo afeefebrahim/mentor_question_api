@@ -12,11 +12,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         style={'input_type': 'password', 'placeholder': 'Password'}
     )
 
-    password = serializers.CharField(
-        read_only=True,
-        required=False,
-    )
-
+    
     class Meta:
         model = UserProfile
         fields = ('id','email', 'username', 'first_name', 'last_name', 'password')
