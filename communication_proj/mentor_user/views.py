@@ -6,6 +6,7 @@ from .serializer import UserProfileSerializer, MessageSerializer, MentorProfileS
 from rest_framework.generics import CreateAPIView, ListCreateAPIView, ListAPIView, RetrieveAPIView
 from .models import UserProfile, Message, Replay
 from .pagination import CustomPagination
+from .permission import IsOwnerOrReadOnly, IsAuthenticated
 
 # Create your views here.
 
@@ -41,6 +42,7 @@ class Registeruser(CreateAPIView):
 class UserMessageAPI(ListCreateAPIView):
     serializer_class = MessageSerializer
     # lookup_field = 'user_id'
+    permission_classes = (IsAuthenticated,)
     # lookup_url_kwarg = 'user_id'
 
     def get_queryset(self):
@@ -55,6 +57,7 @@ class UserMessageAPI(ListCreateAPIView):
 
 class MenterListAPI(ListAPIView):
     serializer_class = MentorProfileSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         queryset = UserProfile.objects.filter(is_mentor=True)
@@ -76,6 +79,7 @@ class MenterListAPI(ListAPIView):
 
 class MenterMessageAPI(ListAPIView):
     serializer_class = MentorMessageSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         queryset = Message.objects.filter(msg_send_to_mentor=self.kwargs.get('mentor_id'))
@@ -90,6 +94,7 @@ class MenterMessageAPI(ListAPIView):
 
 class MenterMessageReplayAPI(ListAPIView):
     serializer_class = MentorMessageSerializer
+    permission_classes = (IsAuthenticated,)
 
     # def get_queryset(self):
     #     queryset = Message.objects.filter(msg_send_to_mentor=self.kwargs.get('mentor_id'))
@@ -104,6 +109,7 @@ class MenterMessageReplayAPI(ListAPIView):
 
 class MenterMessageReplayAPI(ListCreateAPIView):
     serializer_class = MenterMessageReplaySerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         queryset = Replay.objects.filter(message_id=self.kwargs.get('message_id'))
